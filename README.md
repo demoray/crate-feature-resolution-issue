@@ -2,9 +2,15 @@
 
 This is a minimal example of a dependency feature resolution issue in rust.  
 
-The issue is that the `a` crate depends on `clap` with a feature, and the `b` crate depends on `crate` without specifying the feature.
+Crate `a` and `b` in a single workspace both use the `derive` feature from the crate `clap`.  However, while crate `a` specifies the feature flag in it's Cargo.toml, crate `b` does not specify the feature flag.
 
-Compiling both `a` and `b` together works fine, but compiling `b` alone fails with the following error:
+# Build results
+
+1. When building `a` and `b` at the same time (via `cargo build`), both crates compile. 
+2. When building `a` from the workspace level (via `cargo build --bin a`), `a` compiles.
+2. When building `b` from the workspace level (via `cargo build --bin b`), `b` compiles.
+4. When buliding `a` from the crate directory (via `cd a, cargo build`), `a` compiles.
+5. When buliding `b` from the crate directory (via `cd b, cargo build`), `b` fails to compile with the following error:
 
 ```
    Compiling clap v4.0.29
